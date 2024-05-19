@@ -1,11 +1,13 @@
 import './App.css';
-import ButtonFile from './components/button-file/button-file';
+import Routes from './router';
+import Header from './components/header/header';
 
 function App() {
     return (
-    <div>
-        <ButtonFile/>
-    </div>
+        <>
+            <Header/>
+            <Routes/>
+        </>
     );
 }
 

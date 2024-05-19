@@ -1,9 +1,18 @@
 
+import './button-file.css';
 
 function  ButtonFile() {
     return (
-    <div>
-        <input class="styled" type="button" value="Add to favorites"  src="https://icons8.com.br/icon/12141/file"/>
+    <div className='container-input-file'>  
+        <div className='text-content'>   
+            <h1 className='title'>Inclua um arquivo excel:</h1>        
+            <label for='avatar' id='label-input'>
+                <img src='./icon-file.png' alt='icon-file'/>
+                Arquivo
+            </label>
+        </div>   
+
+        <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg"/>
     </div>
     );
 }
