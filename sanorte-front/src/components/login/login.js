@@ -1,10 +1,12 @@
 
 import './login.css';
+import Form  from '../form/form';
+
 function  Login() {
     return (
-        <header className='header-container'>
-            teste
-        </header>    
+        <>
+            <Form/>
+        </>    
 
     );
 }
