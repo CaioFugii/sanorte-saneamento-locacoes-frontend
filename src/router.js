@@ -1,10 +1,7 @@
-import React from "react";
+import React from 'react';
 
 const Routes = () => {
-   return(
-       <BrowserRouter>
-       </BrowserRouter>
-   )
-}
+  return <BrowserRouter></BrowserRouter>;
+};
 
 export default Routes;

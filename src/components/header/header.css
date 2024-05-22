@@ -1,20 +1,20 @@
 .header-container {
-    height: 10%;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
+  height: 10%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .site-img-logo {
-    max-width: 267px;
+  max-width: 267px;
 }
 
 .btn-logout {
-    border: transparent;
-    background-color: transparent;
+  border: transparent;
+  background-color: transparent;
 }
 
 .img-logout {
-    width: 40px;
-    cursor: pointer;
+  width: 40px;
+  cursor: pointer;
 }

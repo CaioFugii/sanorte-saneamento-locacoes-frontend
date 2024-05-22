@@ -1,14 +1,12 @@
-
 import './login.css';
-import Form  from '../form/form';
+import Form from '../form/form';
 
-function  Login() {
-    return (
-        <>
-            <Form/>
-        </>    
-
-    );
+function Login() {
+  return (
+    <>
+      <Form />
+    </>
+  );
 }
 
 export default Login;
