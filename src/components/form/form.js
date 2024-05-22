@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 function Form() {
   const USER = 'ADMIN';
-  const PASSWORD = 'teste';
+  const PASSWORD = process.env.REACT_APP_PASSWORD;
+
   // const [user, setUser] = React.useState('ADMIN');
   const [password, setPassword] = React.useState('');
   const [isInvalid, setInvalid] = React.useState(false);
@@ -26,7 +27,7 @@ function Form() {
     <form onSubmit={handleSubmit}>
       <div className="container-form">
         <img
-          class="site-img-logo"
+          className="site-img-logo"
           id="image-logo"
           src="https://sanorte.com.br/wp-content/uploads/2021/03/logo_novo.png"
           alt="SANORTE"
