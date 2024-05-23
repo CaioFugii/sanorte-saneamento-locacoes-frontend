@@ -1,9 +1,9 @@
 import './button-file.css';
 import Header from '../header/header';
 import React from 'react';
-import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { formatData } from '../../utils/formatData';
+import ExcelJS from 'exceljs';
 
 function ButtonFile() {
   const handleFileUpload = (event) => {
@@ -15,13 +15,22 @@ function ButtonFile() {
         file.type === 'application/vnd.ms-excel')
     ) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const binaryStr = e.target.result;
-        const workbook = XLSX.read(binaryStr, { type: 'binary' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const arrayOfObjects = XLSX.utils.sheet_to_json(sheet);
-        createFile(formatData(arrayOfObjects));
+      reader.onload = async (e) => {
+        const arrayBuffer = e.target.result;
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(arrayBuffer);
+        const worksheet = workbook.getWorksheet(1);
+        const rows = [];
+        let headers = [];
+        worksheet.eachRow((row) => {
+          if (!headers.length) {
+            headers = row.values.map((header) => header);
+          } else {
+            rows.push(row.values);
+          }
+        });
+        const { finalData, totalLines } = formatData(rows, headers);
+        createFile(finalData, totalLines);
       };
       reader.readAsArrayBuffer(file);
     } else {
@@ -29,30 +38,59 @@ function ButtonFile() {
     }
   };
 
-  const createFile = (jsonData) => {
-    const newWorkbook = XLSX.utils.book_new();
-    const newWorksheet = XLSX.utils.json_to_sheet(jsonData);
-    XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Sheet1');
-    const workBookResult = XLSX.write(newWorkbook, {
-      bookType: 'xlsx',
-      type: 'binary',
+  const getCurrentDateString = () => {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const year = today.getFullYear();
+
+    return `pendencias_${day}${month}${year}.xlsx`;
+  };
+
+  const createFile = async (
+    jsonData,
+    totalLines,
+    headers = ['TSS', 'data de serviço', 'quantidade']
+  ) => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sheet1');
+
+    worksheet.columns = headers.map((header) => ({
+      header: header,
+      key: header,
+      width: 30,
+    }));
+
+    jsonData.forEach((data) => worksheet.addRow(data));
+
+    totalLines.forEach((line) => {
+      worksheet.getRow(line).eachCell((cell) => {
+        cell.font = { bold: true, color: { argb: '#000000' } };
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: '#6495ED' },
+        };
+      });
     });
 
-    const stringToArrayOfBuffers = (chunk) => {
-      const buf = new ArrayBuffer(chunk.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i < chunk.length; i++) {
-        view[i] = chunk.charCodeAt(i) & 0xff;
-      }
-      return buf;
-    };
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+      cell.alignment = { horizontal: 'center' };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '0000FF' },
+      };
+    });
 
-    saveAs(
-      new Blob([stringToArrayOfBuffers(workBookResult)], {
-        type: 'application/octet-stream',
-      }),
-      'updated_file.xlsx'
-    );
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    saveAs(blob, getCurrentDateString());
   };
 
   return (
