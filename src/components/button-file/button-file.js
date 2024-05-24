@@ -2,7 +2,12 @@ import './button-file.css';
 import Header from '../header/header';
 import React from 'react';
 import { saveAs } from 'file-saver';
-import { formatData } from '../../utils/formatData';
+import {
+  checkExpiredService,
+  formatData,
+  getCurrentDateString,
+  mergeDataByGroup,
+} from '../../utils/excel-file';
 import ExcelJS from 'exceljs';
 
 function ButtonFile() {
@@ -29,8 +34,10 @@ function ButtonFile() {
             rows.push(row.values);
           }
         });
-        const { finalData, totalLines } = formatData(rows, headers);
-        createFile(finalData, totalLines);
+        const formattedData = formatData(rows, headers);
+        const mergedData = mergeDataByGroup(formattedData);
+
+        await createFile(mergedData);
       };
       reader.readAsArrayBuffer(file);
     } else {
@@ -38,41 +45,16 @@ function ButtonFile() {
     }
   };
 
-  const getCurrentDateString = () => {
-    const today = new Date();
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const year = today.getFullYear();
-
-    return `pendencias_${day}${month}${year}.xlsx`;
-  };
-
-  const createFile = async (
-    jsonData,
-    totalLines,
-    headers = ['TSS', 'data de serviço', 'quantidade']
-  ) => {
+  const createFile = async (dataFile) => {
+    const headers = ['TSS', 'Data de Competência', 'quantidade'];
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Sheet1');
+    const worksheet = workbook.addWorksheet('Planilha 1');
 
     worksheet.columns = headers.map((header) => ({
       header: header,
       key: header,
       width: 30,
     }));
-
-    jsonData.forEach((data) => worksheet.addRow(data));
-
-    totalLines.forEach((line) => {
-      worksheet.getRow(line).eachCell((cell) => {
-        cell.font = { bold: true, color: { argb: '#000000' } };
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: '#6495ED' },
-        };
-      });
-    });
 
     worksheet.getRow(1).eachCell((cell) => {
       cell.font = { bold: true, color: { argb: 'FFFFFF' } };
@@ -82,6 +64,48 @@ function ButtonFile() {
         pattern: 'solid',
         fgColor: { argb: '0000FF' },
       };
+    });
+
+    Object.keys(dataFile).forEach((key) => {
+      const totalOfSet = dataFile[key].reduce(
+        (accumulator, data) => accumulator + data.quantidade,
+        0
+      );
+
+      dataFile[key].forEach((item) => {
+        const row = worksheet.addRow({
+          TSS: item.TSS,
+          'Data de Competência': item['Data de Competência'],
+          quantidade: item.quantidade,
+        });
+
+        const isExpired = checkExpiredService(
+          item.TSS,
+          item['Data de Competência']
+        );
+
+        if (isExpired) {
+          row.eachCell((cell) => {
+            cell.font = { color: { argb: 'FF0000' } };
+          });
+        }
+      });
+
+      const ROW_TOTAL = worksheet.addRow({
+        TSS: '',
+        'Data de Competência': 'Total',
+        quantidade: totalOfSet,
+      });
+
+      ROW_TOTAL.eachCell((cell) => {
+        cell.alignment = { horizontal: 'right' };
+        cell.font = { bold: true, color: { argb: '000000' } };
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: '6FA8DC' },
+        };
+      });
     });
 
     const buffer = await workbook.xlsx.writeBuffer();
