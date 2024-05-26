@@ -17,9 +17,10 @@ function Form() {
 
   function handleClick() {
     if (password !== PASSWORD) {
-      setInvalid(true);
+      setInvalid(true);     
     } else {
       navigate('/file');
+      localStorage.setItem('current_user','ADMIN')
     }
   }
 

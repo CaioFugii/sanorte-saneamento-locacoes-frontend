@@ -9,8 +9,11 @@ import {
   mergeDataByGroup,
 } from '../../utils/excel-file';
 import ExcelJS from 'exceljs';
+import AlertModal from '../modal/modal';
 
 function ButtonFile() {
+
+  const [modalShow, setModalShow] = React.useState(false);
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (
@@ -41,7 +44,8 @@ function ButtonFile() {
       };
       reader.readAsArrayBuffer(file);
     } else {
-      alert('Por favor, envie um arquivo Excel.');
+      setModalShow(true)
+    
     }
   };
 
@@ -138,6 +142,11 @@ function ButtonFile() {
           accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         />
       </div>
+      <AlertModal
+      show={modalShow}
+      onHide={() => setModalShow(false)}
+      text={'Por favor, envie um arquivo Excel.'}
+    />
     </>
   );
 }
