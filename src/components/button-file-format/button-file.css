@@ -1,0 +1,19 @@
+input[type='file'] {
+  display: none;
+}
+
+#label-input {
+  width: 110px;
+  height: 110px;
+  cursor: pointer;
+  border: 1px dashed white;
+  border-radius: 13px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-content {
+  flex-direction: column;
+}

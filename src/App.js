@@ -3,8 +3,10 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Login from './components/login/login';
-import ButtonFile from './components/button-file/button-file';
+import ButtonFile from './components/button-file-format/button-file';
 import Page404 from './components/404/404-page';
+import TableAnalyses from './pages/table-analyses/table-analyses';
+import ButtonFileExecute from './components/button-file-execute/button-file-execute';
 
 function App() {
 
@@ -12,12 +14,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-       
         <Route path="/" element={<Login />} />
         {/* <PrivateRoute path="/file" component={ <ButtonFile />} /> */}
         <Route path="file" element={<ButtonFile />} />
+        <Route path="/file-execute" element={<ButtonFileExecute />} />
         <Route path="*" element={<Page404 />} />
-
+        <Route path="table-analyses" element={<TableAnalyses />} />
       </Routes>
     </BrowserRouter>
   );

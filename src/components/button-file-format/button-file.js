@@ -1,5 +1,4 @@
 import './button-file.css';
-import Header from '../header/header';
 import React from 'react';
 import { saveAs } from 'file-saver';
 import {
@@ -10,6 +9,8 @@ import {
 } from '../../utils/excel-file';
 import ExcelJS from 'exceljs';
 import AlertModal from '../modal/modal';
+import ContainerPage from '../../pages/container-page/container-page';
+
 
 function ButtonFile() {
 
@@ -123,8 +124,7 @@ function ButtonFile() {
 
   return (
     <>
-      <Header />
-      <div className="container-input-file">
+      <ContainerPage>
         <div className="text-content">
           <h1 className="title">Inclua um arquivo excel:</h1>
           <label htmlFor="input-button" id="label-input">
@@ -141,7 +141,7 @@ function ButtonFile() {
           name="input-button"
           accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         />
-      </div>
+     </ContainerPage>
       <AlertModal
       show={modalShow}
       onHide={() => setModalShow(false)}
