@@ -1,16 +1,13 @@
 import Button from 'react-bootstrap/Button';
 
-function Cards() {
+function Cards({ children }) {
   return (
     <div className="d-grid gap-3">
-    <Button variant="primary" size="lg">
-      Block level button
-    </Button>
-    <Button variant="secondary" size="lg">
-      Block level button
-    </Button>
-  </div>
-  )
+      <Button variant="primary" size="lg">
+        {children}
+      </Button>
+    </div>
+  );
 }
 
 export default Cards;
