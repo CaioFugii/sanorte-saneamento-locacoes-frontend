@@ -7,6 +7,7 @@ import ButtonFile from './components/button-file-format/button-file';
 import Page404 from './components/404/404-page';
 import TableAnalyses from './pages/table-analyses/table-analyses';
 import ButtonFileExecute from './components/button-file-execute/button-file-execute';
+import CityAnalyses from './pages/city-analyses/city-analyses';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/file-execute" element={<ButtonFileExecute />} />
         <Route path="*" element={<Page404 />} />
         <Route path="table-analyses" element={<TableAnalyses />} />
+        <Route path="city" element={<CityAnalyses />} />
       </Routes>
     </BrowserRouter>
   );

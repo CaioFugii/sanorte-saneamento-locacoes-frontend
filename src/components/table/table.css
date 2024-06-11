@@ -1,0 +1,18 @@
+#tables {
+    width: 600px;
+    padding: 1vh;
+
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1876px;
+    justify-content: space-between;
+    margin-top: 5vh;
+}
+
+th {
+    background-color: red;
+}
