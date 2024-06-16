@@ -23,11 +23,15 @@ function TableAnalyses() {
   return (
     <ContainerPage>
       <div className='container-table'>
-      <DatePicker
+        <div className='container-date'>
+        <p>Filtrar por data:</p>
+        <DatePicker
         selected={new Date()}
         onSelect={() => console.log(`teste1`)} //when day is clicked
         onChange={() => console.log(`teste1`)} //only when value has changed
       />
+        </div>
+      
       <TableComponent data={data}></TableComponent>
       </div>
     </ContainerPage>

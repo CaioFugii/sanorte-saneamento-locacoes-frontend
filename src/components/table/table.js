@@ -3,9 +3,6 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Col from 'react-bootstrap/Col';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
 import './table.css';
 
@@ -43,7 +40,27 @@ function TableComponent({data}) {
   </div>
       </Tab>
       <Tab eventKey="late" title="Pendentes">
-        Tab content for Profile
+      <div className='container'>
+    {data.map((item, index) => {
+      return <div id='tables'><Table striped bordered hover variant="primary" responsive="sm">
+      <thead>
+        <tr>
+          <th key={index}>Referência</th>
+          {Object.keys(item.summary).map((key) => <th>{key}</th>)}
+        </tr>
+      </thead>
+      <tbody>    
+        <tr>
+        <td>
+        {item.tableName}
+        </td>
+        {Object.keys(item.summary).map((key) => <th><InformationModal children={item.values} number={item.summary[key]} classification={key}/></th>)}
+        </tr>
+      </tbody>
+    </Table>
+    </div>
+    })}
+  </div>
       </Tab>
     </Tabs> 
     
@@ -54,8 +71,10 @@ function TableComponent({data}) {
 function InformationModal({children, number, classification}) {
   const [lgShow, setLgShow] = useState(false);
   const [dataModal, setDataModal] = useState([]);
-
-  setDataModal([children.find((i) => i.classification === classification)])
+ const getObject=()=>{
+  setDataModal(children.find((i) => i.classification === classification))
+ }
+  
 
 
   return (
@@ -73,7 +92,7 @@ function InformationModal({children, number, classification}) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            {dataModal && dataModal.map((item,index)=>{
+            {children.map((item,index)=>{
        return <p key={index}>   Cidade : {item.origin}</p>
            
               
