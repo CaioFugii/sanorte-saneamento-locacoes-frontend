@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 function Form() {
   const USER = 'ADMIN';
-  const PASSWORD = process.env.REACT_APP_PASSWORD;
+  const password = process.env.REACT_APP_PASSWORD;
 
-  // const [user, setUser] = React.useState('ADMIN');
-  const [password, setPassword] = React.useState('');
+const [user, setUser] = React.useState('ADMIN');
+  const [passwordLogin, setPasswordLogin] = React.useState('');
   const [isInvalid, setInvalid] = React.useState(false);
   const navigate = useNavigate();
 
@@ -16,13 +16,34 @@ function Form() {
   }
 
   function handleClick() {
-    if (password !== PASSWORD) {
+    if (passwordLogin !== password) {
+      
       setInvalid(true);     
     } else {
+      fetch('https://sanorte-backend-cc7f6aa7a173.heroku.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body:{
+          user,
+          password,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
+        .then((json) => {
+          console.log(json);
+          return json;
+        });
       navigate('/file');
       localStorage.setItem('current_user','ADMIN')
     }
   }
+
+  
 
   return (
     <form onSubmit={handleSubmit}>
@@ -45,8 +66,8 @@ function Form() {
           <input
             type="password"
             id="nome"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            value={passwordLogin}
+            onChange={(event) => setPasswordLogin(event.target.value)}
             placeholder="&nbsp;&nbsp;SENHA"
           />
           {isInvalid ? (

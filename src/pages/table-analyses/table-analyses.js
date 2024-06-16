@@ -1,41 +1,54 @@
 import React from 'react';
 import './table-analyses.css';
 import ContainerPage from '../container-page/container-page';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useState } from 'react';
-import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import TableComponent from '../../components/table/table';
 import data from '../../utils/data-mock';
+import { addDays, addMonths } from 'date-fns';
 
-function TableAnalyses() {
-  const Example = () => {
-    const [startDate, setStartDate] = useState(new Date());
-    return (
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-      />
-    );
-  };
-
+function TableAnalyses() {  
 
   return (
     <ContainerPage>
       <div className='container-table'>
-        <div className='container-date'>
-        <p>Filtrar por data:</p>
-        <DatePicker
-        selected={new Date()}
-        onSelect={() => console.log(`teste1`)} //when day is clicked
-        onChange={() => console.log(`teste1`)} //only when value has changed
-      />
-        </div>
-      
+    <Calendar/>      
       <TableComponent data={data}></TableComponent>
       </div>
     </ContainerPage>
   );
+
 }
+
+
+function Calendar(){
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(null);
+  const onChange = (dates) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
+  return (
+    <div className='container-date'>
+      <p>Selecionar data de consulta :</p>
+    <DatePicker
+      selected={startDate}
+      onChange={onChange}
+      minDate={addDays(new Date(),-30)}
+      maxDate={addDays(new Date(),1)}
+      startDate={startDate}
+      endDate={endDate}
+      selectsRange
+      dateFormat="dd/MM/yyyy"
+
+    />
+    </div>
+  );
+};
 
 export default TableAnalyses;
