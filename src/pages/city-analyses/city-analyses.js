@@ -6,7 +6,17 @@ import Cards from '../../components/cards/cards';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function CityAnalyses() {
-  const city = ['Santos - Cubatão', 'São Sebastião - Ilha bela', 'São Vicente'];
+  const location = localStorage.getItem('location');
+  const [city, setCity] = React.useState([]);
+  React.useEffect(() => {
+    if (location === '*') {
+      setCity(['Santos - Cubatão', 'São Sebastião - Ilha bela', 'São Vicente']);
+    } else if (location === 'Santos - Cubatão') {
+      setCity(['Santos - Cubatão']);
+    } else if (location === 'São Sebastião - Ilha bela') {
+      setCity(['São Sebastião - Ilha bela']);
+    }
+  }, [location]);
 
   return (
     <ContainerPage>
