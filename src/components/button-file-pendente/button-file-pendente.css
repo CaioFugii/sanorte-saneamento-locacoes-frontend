@@ -17,7 +17,3 @@ input[type='file'] {
 .text-content {
   flex-direction: column;
 }
-#container-success {
-  display: flex;
-  flex-direction: column;
-}

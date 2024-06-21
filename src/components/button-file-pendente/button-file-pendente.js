@@ -1,22 +1,22 @@
-import './button-file-execute.css';
+import './button-file-pendente.css';
 import React from 'react';
 import AlertModal from '../modal/modal';
 import ContainerPage from '../../pages/container-page/container-page';
 import ReactLoading from 'react-loading';
 import { useNavigate } from 'react-router-dom';
 
-function ButtonFileExecute() {
+function ButtonFilePendente() {
   const [modalShow, setModalShow] = React.useState(false);
   const [modalShowError, setModalShowError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
+  const tokenJwt = localStorage.getItem('token');
   const [isData, setIsData] = React.useState(false);
   const navigate = useNavigate();
-
-  const tokenJwt = localStorage.getItem('token');
 
   async function handleFileUpload(event) {
     console.log(event.target.files);
     const file = event.target.files[0];
+    setIsData(true);
     if (
       file &&
       (file.type ===
@@ -24,24 +24,21 @@ function ButtonFileExecute() {
         file.type === 'application/vnd.ms-excel')
     ) {
       try {
-        setIsData(true);
         const formData = new FormData();
         formData.append('file', file);
-        await fetch(
-          `${process.env.REACT_APP_BASE_URL}/api/completed-services`,
-          {
-            method: 'POST',
-            headers: {
-              Authorization: tokenJwt,
-            },
-            body: formData,
-          }
-        );
+        await fetch(`${process.env.REACT_APP_BASE_URL}/api/pending-services`, {
+          method: 'POST',
+          headers: {
+            Authorization: tokenJwt,
+          },
+          body: formData,
+        });
         setSuccess(true);
         setIsData(false);
       } catch (error) {
         setModalShow(true);
         setModalShowError(true);
+        setIsData(false);
       }
     }
   }
@@ -65,15 +62,6 @@ function ButtonFileExecute() {
           </div>
         )}
         {isData === false && success === false && (
-          <div className="text-content">
-            <h1 className="title">Arquivos de executados:</h1>
-            <label htmlFor="input-button" id="label-input">
-              <img src="./icon-file.png" alt="icon-file" />
-              Arquivo
-            </label>
-          </div>
-        )}
-        {success === true && (
           <div
             className="alert alert-success alert-dismissible fade show"
             role="alert"
@@ -89,7 +77,6 @@ function ButtonFileExecute() {
             para incluir um novo arquivo.
           </div>
         )}
-
         <input
           type="file"
           multiple={false}
@@ -103,14 +90,16 @@ function ButtonFileExecute() {
         show={modalShow}
         onHide={() => setModalShow(false)}
         text={'Por favor, envie um arquivo Excel.'}
+        content={'Entendi'}
       />
       <AlertModal
         show={modalShowError}
         onHide={() => setModalShowError(false)}
         text={'Erro ao enviar arquivo'}
+        content={'Entendi'}
       />
     </>
   );
 }
 
-export default ButtonFileExecute;
+export default ButtonFilePendente;

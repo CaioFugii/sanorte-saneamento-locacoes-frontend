@@ -8,10 +8,9 @@ import Page404 from './components/404/404-page';
 import TableAnalyses from './pages/table-analyses/table-analyses';
 import ButtonFileExecute from './components/button-file-execute/button-file-execute';
 import CityAnalyses from './pages/city-analyses/city-analyses';
+import ButtonFilePendente from './components/button-file-pendente/button-file-pendente';
 
 function App() {
-
-  
   return (
     <BrowserRouter>
       <Routes>
@@ -19,6 +18,7 @@ function App() {
         {/* <PrivateRoute path="/file" component={ <ButtonFile />} /> */}
         <Route path="file" element={<ButtonFile />} />
         <Route path="/file-execute" element={<ButtonFileExecute />} />
+        <Route path="/file-pendente" element={<ButtonFilePendente />} />
         <Route path="*" element={<Page404 />} />
         <Route path="table-analyses" element={<TableAnalyses />} />
         <Route path="city" element={<CityAnalyses />} />
@@ -38,14 +38,13 @@ function App() {
 //     return true
 // }
 //   return (
-  
+
 //     isAuth() ?
 //       <Route {...rest} render={props => (
 //               <Component {...props} />
-          
-//       )} />:<Route path='*' element={<Navigate to='/'/>}/> 
+
+//       )} />:<Route path='*' element={<Navigate to='/'/>}/>
 //   );
 //   };
-  
 
 export default App;

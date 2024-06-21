@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import './table.css';
 
-function TableComponent({ data }) {
+function TableComponent({ data, dataPending }) {
   return (
     <Tabs
       defaultActiveKey="home"
@@ -35,14 +35,17 @@ function TableComponent({ data }) {
                       <td>{item.tableName}</td>
                       {Object.keys(item.summary).map((key) => (
                         <th>
-                          <div className='container-number'>
-                          {key === 'total' || item.summary[key] === 0?
-                           item.summary[key]: <InformationModal
-                           children={item.values}
-                           number={item.summary[key]}
-                           classification={key}
-                         /> }
-                         </div>
+                          <div className="container-number">
+                            {key === 'total' || item.summary[key] === 0 ? (
+                              item.summary[key]
+                            ) : (
+                              <InformationModal
+                                children={item.values}
+                                number={item.summary[key]}
+                                classification={key}
+                              />
+                            )}
+                          </div>
                         </th>
                       ))}
                     </tr>
@@ -51,11 +54,16 @@ function TableComponent({ data }) {
               </div>
             );
           })}
+          {data.length === 0 && (
+            <div class="alert alert-dark" role="alert">
+              Nao ha tarefas executadas nessa data
+            </div>
+          )}
         </div>
       </Tab>
       <Tab eventKey="late" title="Pendentes">
         <div className="container">
-          {data.map((item, index) => {
+          {dataPending.map((item, index) => {
             return (
               <div id="tables">
                 <Table striped bordered hover variant="primary" responsive="sm">
@@ -85,6 +93,11 @@ function TableComponent({ data }) {
               </div>
             );
           })}
+          {dataPending.length === 0 && (
+            <div class="alert alert-dark" role="alert">
+              Nao ha tarefas pendentes nessa data
+            </div>
+          )}
         </div>
       </Tab>
     </Tabs>

@@ -49,13 +49,16 @@ function Menu() {
               <Col sm>
                 <ListGroup>
                   <ListGroup.Item action href="/file">
-                    Formatador de arquivo
+                    Formatador de arquivo executados
                   </ListGroup.Item>
                   <ListGroup.Item action href="/city">
                     Tabelas
                   </ListGroup.Item>
                   <ListGroup.Item action href="/file-execute">
                     Arquivo Executados
+                  </ListGroup.Item>
+                  <ListGroup.Item action href="/file-pendente">
+                    Arquivo Pendentes
                   </ListGroup.Item>
                   <ListGroup.Item
                     action
