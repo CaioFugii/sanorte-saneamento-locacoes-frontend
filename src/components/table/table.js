@@ -136,7 +136,7 @@ function TableComponent({ data, dataPending }) {
 
 function InformationModal({ children, number, classification }) {
   const [lgShow, setLgShow] = useState(false);
-  const [dataModal, setDataModal] = useState(children);
+  const dataModal = children;
   return (
     <>
       <Button variant="link" onClick={() => setLgShow(true)}>
