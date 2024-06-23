@@ -8,12 +8,12 @@ import {
   mergeDataByGroup,
 } from '../../utils/excel-file';
 import ExcelJS from 'exceljs';
-import AlertModal from '../modal/modal';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 import ContainerPage from '../../pages/container-page/container-page';
 
-
 function ButtonFile() {
-
   const [modalShow, setModalShow] = React.useState(false);
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -45,8 +45,7 @@ function ButtonFile() {
       };
       reader.readAsArrayBuffer(file);
     } else {
-      setModalShow(true)
-    
+      setModalShow(true);
     }
   };
 
@@ -141,12 +140,22 @@ function ButtonFile() {
           name="input-button"
           accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         />
-     </ContainerPage>
-      <AlertModal
-      show={modalShow}
-      onHide={() => setModalShow(false)}
-      text={'Por favor, envie um arquivo Excel.'}
-    />
+      </ContainerPage>
+
+      <Modal
+        show={modalShow}
+        onHide={!modalShow}
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Body>
+          <p>'Por favor, envie um arquivo Excel.'</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setModalShow(false)}>Entendi</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

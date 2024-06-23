@@ -35,8 +35,8 @@ function Form() {
       if (response.ok) {
         const token = await response.json();
         const decodedToken = decodeToken(token.token);
-        console.log(decodedToken);
         localStorage.setItem('token', token.token);
+        localStorage.setItem('exp', decodedToken.exp);
         localStorage.setItem('location', decodedToken.location);
         localStorage.setItem('current_user', decodedToken.role);
         setIsData(false);

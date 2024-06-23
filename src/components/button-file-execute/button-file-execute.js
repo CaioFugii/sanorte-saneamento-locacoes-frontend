@@ -1,54 +1,52 @@
 import './button-file-execute.css';
 import React from 'react';
-import AlertModal from '../modal/modal';
 import ContainerPage from '../../pages/container-page/container-page';
 import ReactLoading from 'react-loading';
 import { useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 function ButtonFileExecute() {
   const [modalShow, setModalShow] = React.useState(false);
-  const [modalShowError, setModalShowError] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
   const [isData, setIsData] = React.useState(false);
   const navigate = useNavigate();
 
   const tokenJwt = localStorage.getItem('token');
 
   async function handleFileUpload(event) {
-    console.log(event.target.files);
     const file = event.target.files[0];
+    setIsData(true);
     if (
       file &&
       (file.type ===
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
         file.type === 'application/vnd.ms-excel')
     ) {
-      try {
-        setIsData(true);
-        const formData = new FormData();
-        formData.append('file', file);
-        await fetch(
-          `${process.env.REACT_APP_BASE_URL}/api/completed-services`,
-          {
-            method: 'POST',
-            headers: {
-              Authorization: tokenJwt,
-            },
-            body: formData,
-          }
-        );
-        setSuccess(true);
-        setIsData(false);
-      } catch (error) {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/api/completed-services`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: tokenJwt,
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
         setModalShow(true);
-        setModalShowError(true);
+        setIsData(false);
+        navigate('/error-execute');
+      } else {
+        setIsData(false);
+        navigate('/success-execute');
       }
+    } else {
+      setIsData(false);
+      setModalShow(true);
     }
-  }
-  function newFile() {
-    navigate('/file-execute');
-    setIsData(false);
-    setSuccess(false);
   }
 
   return (
@@ -64,32 +62,15 @@ function ButtonFileExecute() {
             />
           </div>
         )}
-        {isData === false && success === false && (
+        {isData === false && (
           <div className="text-content">
-            <h1 className="title">Arquivos de executados:</h1>
+            <h1 className="title">Carregamento de tarefas executadas:</h1>
             <label htmlFor="input-button" id="label-input">
               <img src="./icon-file.png" alt="icon-file" />
               Arquivo
             </label>
           </div>
         )}
-        {success === true && (
-          <div
-            className="alert alert-success alert-dismissible fade show"
-            role="alert"
-          >
-            <strong> Enviado com sucesso! </strong>Clique
-            <button
-              type="button"
-              className="btn btn-link"
-              onClick={() => newFile()}
-            >
-              aqui
-            </button>
-            para incluir um novo arquivo.
-          </div>
-        )}
-
         <input
           type="file"
           multiple={false}
@@ -99,16 +80,27 @@ function ButtonFileExecute() {
           accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         />
       </ContainerPage>
-      <AlertModal
+      <Modal
         show={modalShow}
-        onHide={() => setModalShow(false)}
-        text={'Por favor, envie um arquivo Excel.'}
-      />
-      <AlertModal
-        show={modalShowError}
-        onHide={() => setModalShowError(false)}
-        text={'Erro ao enviar arquivo'}
-      />
+        onHide={!modalShow}
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Body>
+          <p>'Por favor, envie um arquivo Excel.'</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => {
+              setModalShow(false);
+              navigate('/error-execute');
+            }}
+          >
+            Entendi
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

@@ -57,7 +57,7 @@ function Menu() {
                   <ListGroup.Item action href="/file-execute">
                     Arquivo Executados
                   </ListGroup.Item>
-                  <ListGroup.Item action href="/file-pendente">
+                  <ListGroup.Item action href="/file-pending">
                     Arquivo Pendentes
                   </ListGroup.Item>
                   <ListGroup.Item

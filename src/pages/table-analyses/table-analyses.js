@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import TableComponent from '../../components/table/table';
 import { addDays } from 'date-fns';
 import ReactLoading from 'react-loading';
+import { useNavigate } from 'react-router-dom';
 
 function TableAnalyses() {
   const [data, setData] = React.useState([]);
@@ -17,6 +18,7 @@ function TableAnalyses() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
   const [isData, setIsData] = useState(true);
+  const navigate = useNavigate();
 
   let date = new Date();
   let day = date.getDate();
@@ -39,6 +41,10 @@ function TableAnalyses() {
       };
       const location = availableLocations[city];
 
+      if (!location) {
+        throw new Error('Location is required');
+      }
+
       url.searchParams.append('from', initialDateFilter);
       url.searchParams.append('to', endDateFilter);
       url.searchParams.append('location', location);
@@ -55,6 +61,7 @@ function TableAnalyses() {
         setIsData(false);
       }
     } catch (error) {
+      navigate('/city');
       console.log(error);
     }
   };

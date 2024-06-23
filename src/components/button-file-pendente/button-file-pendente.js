@@ -1,20 +1,18 @@
 import './button-file-pendente.css';
 import React from 'react';
-import AlertModal from '../modal/modal';
 import ContainerPage from '../../pages/container-page/container-page';
 import ReactLoading from 'react-loading';
 import { useNavigate } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 function ButtonFilePendente() {
   const [modalShow, setModalShow] = React.useState(false);
-  const [modalShowError, setModalShowError] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
   const tokenJwt = localStorage.getItem('token');
   const [isData, setIsData] = React.useState(false);
   const navigate = useNavigate();
 
   async function handleFileUpload(event) {
-    console.log(event.target.files);
     const file = event.target.files[0];
     setIsData(true);
     if (
@@ -23,29 +21,32 @@ function ButtonFilePendente() {
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
         file.type === 'application/vnd.ms-excel')
     ) {
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-        await fetch(`${process.env.REACT_APP_BASE_URL}/api/pending-services`, {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/api/pending-services`,
+        {
           method: 'POST',
           headers: {
             Authorization: tokenJwt,
           },
           body: formData,
-        });
-        setSuccess(true);
-        setIsData(false);
-      } catch (error) {
+        }
+      );
+
+      if (!response.ok) {
         setModalShow(true);
-        setModalShowError(true);
+
         setIsData(false);
+        navigate('/error-pending');
+      } else {
+        setIsData(false);
+        navigate('/success-pending');
       }
+    } else {
+      setIsData(false);
+      setModalShow(true);
     }
-  }
-  function newFile() {
-    navigate('/file-execute');
-    setIsData(false);
-    setSuccess(false);
   }
 
   return (
@@ -61,20 +62,13 @@ function ButtonFilePendente() {
             />
           </div>
         )}
-        {isData === false && success === false && (
-          <div
-            className="alert alert-success alert-dismissible fade show"
-            role="alert"
-          >
-            <strong> Enviado com sucesso! </strong>Clique
-            <button
-              type="button"
-              className="btn btn-link"
-              onClick={() => newFile()}
-            >
-              aqui
-            </button>
-            para incluir um novo arquivo.
+        {isData === false && (
+          <div className="text-content">
+            <h1 className="title">Carregamento de tarefas pendentes:</h1>
+            <label htmlFor="input-button" id="label-input">
+              <img src="./icon-file.png" alt="icon-file" />
+              Arquivo
+            </label>
           </div>
         )}
         <input
@@ -86,18 +80,27 @@ function ButtonFilePendente() {
           accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         />
       </ContainerPage>
-      <AlertModal
+      <Modal
         show={modalShow}
-        onHide={() => setModalShow(false)}
-        text={'Por favor, envie um arquivo Excel.'}
-        content={'Entendi'}
-      />
-      <AlertModal
-        show={modalShowError}
-        onHide={() => setModalShowError(false)}
-        text={'Erro ao enviar arquivo'}
-        content={'Entendi'}
-      />
+        onHide={!modalShow}
+        size="md"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Body>
+          <p>'Por favor, envie um arquivo Excel.'</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => {
+              setModalShow(false);
+              navigate('/error-pending');
+            }}
+          >
+            Entendi
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

@@ -18,84 +18,114 @@ function TableComponent({ data, dataPending }) {
     >
       <Tab eventKey="home" title="Tarefas executadas">
         <div className="container">
-          {data.map((item, index) => {
-            return (
-              <div id="tables">
-                <Table striped bordered hover variant="primary" responsive="sm">
-                  <thead>
-                    <tr>
-                      <th key={index}>Referência</th>
-                      {Object.keys(item.summary).map((key) => (
-                        <th>{key}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{item.tableName}</td>
-                      {Object.keys(item.summary).map((key) => (
-                        <th>
-                          <div className="container-number">
-                            {key === 'total' || item.summary[key] === 0 ? (
-                              item.summary[key]
-                            ) : (
-                              <InformationModal
-                                children={item.values}
-                                number={item.summary[key]}
-                                classification={key}
-                              />
-                            )}
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            );
-          })}
+          {data.length !== 0 && (
+            <div className="scrollBar">
+              {data.map((item, index) => {
+                return (
+                  <div id="tables" key={index}>
+                    <Table
+                      striped
+                      bordered
+                      hover
+                      variant="primary"
+                      responsive="sm"
+                    >
+                      <thead>
+                        <tr>
+                          <th key={index}>Referência</th>
+                          {Object.keys(item.summary).map((key, index) => (
+                            <th key={index}>{key}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td key={index}>{item.tableName}</td>
+                          {Object.keys(item.summary).map((key, index) => (
+                            <th key={index}>
+                              <div className="container-number">
+                                {key.includes('%') ||
+                                key === 'Total' ||
+                                item.summary[key] === 0 ? (
+                                  item.summary[key]
+                                ) : (
+                                  <InformationModal
+                                    children={item.values}
+                                    number={item.summary[key]}
+                                    classification={key}
+                                  />
+                                )}
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </div>
+                );
+              })}
+            </div>
+          )}
           {data.length === 0 && (
-            <div class="alert alert-dark" role="alert">
-              Nao ha tarefas executadas nessa data
+            <div className="alert alert-dark" role="alert">
+              Não há tarefas executadas nessa data
             </div>
           )}
         </div>
       </Tab>
       <Tab eventKey="late" title="Pendentes">
         <div className="container">
-          {dataPending.map((item, index) => {
-            return (
-              <div id="tables">
-                <Table striped bordered hover variant="primary" responsive="sm">
-                  <thead>
-                    <tr>
-                      <th key={index}>Referência</th>
-                      {Object.keys(item.summary).map((key) => (
-                        <th>{key}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{item.tableName}</td>
-                      {Object.keys(item.summary).map((key) => (
-                        <th>
-                          <InformationModal
-                            children={item.values}
-                            number={item.summary[key]}
-                            classification={key}
-                          />
-                        </th>
-                      ))}
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            );
-          })}
+          {dataPending.length !== 0 && (
+            <div className="scrollBar">
+              {dataPending.map((item, index) => {
+                return (
+                  <div id="tables" key={index}>
+                    <Table
+                      striped
+                      bordered
+                      hover
+                      variant="primary"
+                      responsive="sm"
+                    >
+                      <thead>
+                        <tr key={index}>
+                          <th key={index}>Referência</th>
+                          {Object.keys(item.summary).map((key, index) => (
+                            <th key={index}>{key}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{item.tableName}</td>
+                          {Object.keys(item.summary).map((key, index) => (
+                            <th key={index}>
+                              <div className="container-number">
+                                {key.includes('%') ||
+                                key === 'Total' ||
+                                item.summary[key] === 0 ? (
+                                  item.summary[key]
+                                ) : (
+                                  <InformationModal
+                                    children={item.values}
+                                    number={item.summary[key]}
+                                    classification={key}
+                                  />
+                                )}
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </div>
+                );
+              })}
+            </div>
+          )}
           {dataPending.length === 0 && (
-            <div class="alert alert-dark" role="alert">
-              Nao ha tarefas pendentes nessa data
+            <div className="alert alert-dark" role="alert">
+              Não há tarefas pendentes nessa data
             </div>
           )}
         </div>
@@ -130,12 +160,12 @@ function InformationModal({ children, number, classification }) {
               <thead>
                 <tr>
                   <th>Cidade</th>
-                  <th>Endereco</th>
+                  <th>Endereço</th>
                   <th>Tipo</th>
-                  <th>Numero de Servico</th>
+                  <th>Nº de Serviço</th>
                   <th>Status</th>
                   <th>Resultado</th>
-                  <th>Classificacao</th>
+                  <th>Classificação</th>
                   <th>TSS</th>
                 </tr>
               </thead>
@@ -145,7 +175,7 @@ function InformationModal({ children, number, classification }) {
                     .filter((data) => data.classification === classification)
                     .map((item, i) => {
                       return (
-                        <tr>
+                        <tr key={i}>
                           <td key={i}>{item.city}</td>
                           <td key={i}>{item.address}</td>
                           <td key={i}>{item.type}</td>

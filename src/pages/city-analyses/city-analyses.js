@@ -15,6 +15,8 @@ function CityAnalyses() {
       setCity(['Santos - Cubatão']);
     } else if (location === 'São Sebastião - Ilha bela') {
       setCity(['São Sebastião - Ilha bela']);
+    } else if (location === 'São Vicente') {
+      setCity(['São Vicente']);
     }
   }, [location]);
 
