@@ -38,6 +38,7 @@ function TableAnalyses() {
         'Santos - Cubatão': 'SC',
         'São Sebastião - Ilha bela': 'SI',
         'São Vicente': 'SV',
+        'Guarujá e Bertioga': 'GB',
       };
       const location = availableLocations[city];
 
@@ -74,6 +75,7 @@ function TableAnalyses() {
         'Santos - Cubatão': 'SC',
         'São Sebastião - Ilha bela': 'SI',
         'São Vicente': 'SV',
+        'Guarujá e Bertioga': 'GB',
       };
       const location = availableLocations[city];
 
