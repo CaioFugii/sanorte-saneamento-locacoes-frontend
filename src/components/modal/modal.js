@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function AlertModal(props) {
+function AlertModal(props, content) {
   return (
     <Modal
       {...props}
@@ -10,12 +10,10 @@ function AlertModal(props) {
       centered
     >
       <Modal.Body>
-        <p>
-         { props.text}
-        </p>
+        <p>{props.text}</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide}>Entendi</Button>
+        <Button onClick={props.onHide}>{content}</Button>
       </Modal.Footer>
     </Modal>
   );
