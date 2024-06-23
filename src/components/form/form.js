@@ -20,7 +20,7 @@ function Form() {
     setIsData(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/api/login`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/login`,
         {
           method: 'POST',
           headers: {

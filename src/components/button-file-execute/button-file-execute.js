@@ -25,7 +25,7 @@ function ButtonFileExecute() {
       const formData = new FormData();
       formData.append('file', file);
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/api/completed-services`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/completed-services`,
         {
           method: 'POST',
           headers: {

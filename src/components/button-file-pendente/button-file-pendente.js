@@ -24,7 +24,7 @@ function ButtonFilePendente() {
       const formData = new FormData();
       formData.append('file', file);
       const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/api/pending-services`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/pending-services`,
         {
           method: 'POST',
           headers: {

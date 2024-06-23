@@ -32,7 +32,7 @@ function TableAnalyses() {
   const getTable = async (initialDateFilter, endDateFilter) => {
     try {
       const url = new URL(
-        `${process.env.REACT_APP_BASE_URL}/api/completed-services`
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/completed-services`
       );
       const availableLocations = {
         'Santos - Cubatão': 'SC',
@@ -68,7 +68,7 @@ function TableAnalyses() {
   const getTablePending = async (initialDateFilter, endDateFilter) => {
     try {
       const url = new URL(
-        `${process.env.REACT_APP_BASE_URL}/api/pending-services`
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/pending-services`
       );
       const availableLocations = {
         'Santos - Cubatão': 'SC',
