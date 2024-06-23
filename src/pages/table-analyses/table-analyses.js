@@ -143,8 +143,8 @@ function TableAnalyses() {
             <DatePicker
               selected={startDate}
               onChange={onChange}
-              minDate={addDays(new Date(), -30)}
-              maxDate={addDays(new Date(), 1)}
+              minDate={new Date()}
+              maxDate={new Date()}
               startDate={startDate}
               endDate={endDate}
               selectsRange
