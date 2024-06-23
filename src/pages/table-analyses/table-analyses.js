@@ -5,6 +5,7 @@ import ContainerPage from '../container-page/container-page';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
+import { sub } from 'date-fns';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import TableComponent from '../../components/table/table';
@@ -22,13 +23,13 @@ function TableAnalyses() {
   let date = new Date();
   let day = date.getDate();
 
-  let month = date.getMonth();
+  let month = date.getMonth() + 1;
 
   let year = date.getFullYear();
   let formatDate = year + '-' + String(month).padStart(2, '0') + '-' + day;
   const tokenJwt = localStorage.getItem('token');
   const city = localStorage.getItem('citySelected');
-  const getTable = async (initialDateFilter, endDateFilter) => {
+  const getTable = async (from, to) => {
     try {
       const url = new URL(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/completed-services`
@@ -44,8 +45,8 @@ function TableAnalyses() {
         throw new Error('Location is required');
       }
 
-      url.searchParams.append('from', initialDateFilter);
-      url.searchParams.append('to', endDateFilter);
+      url.searchParams.append('from', from);
+      url.searchParams.append('to', to);
       url.searchParams.append('location', location);
       setIsData(true);
       const response = await fetch(url, {
@@ -107,20 +108,31 @@ function TableAnalyses() {
 
     let startDay = startDate.getDate();
 
-    let startMonth = startDate.getMonth();
+    let startMonth = startDate.getMonth() + 1;
 
     let startYear = startDate.getFullYear();
     let formatDateStart =
-      startYear + '-' + String(startMonth).padStart(2, '0') + '-' + startDay;
-    let endDay = startDate.getDate();
+      startYear +
+      '-' +
+      String(startMonth).padStart(2, '0') +
+      '-' +
+      String(startDay).padStart(2, '0');
 
-    let endMonth = startDate.getMonth();
+    if (end) {
+      let endDay = end.getDate();
 
-    let endYear = startDate.getFullYear();
-    let formatDateEnd =
-      endYear + '-' + String(endMonth).padStart(2, '0') + '-' + endDay;
-    getTable(formatDateStart, formatDateEnd);
-    getTablePending(formatDateStart, formatDateEnd);
+      let endMonth = end.getMonth() + 1;
+
+      let endYear = end.getFullYear();
+      let formatDateEnd =
+        endYear +
+        '-' +
+        String(endMonth).padStart(2, '0') +
+        '-' +
+        String(endDay).padStart(2, '0');
+      getTable(formatDateStart, formatDateEnd);
+      getTablePending(formatDateStart, formatDateEnd);
+    }
   };
 
   return (
@@ -142,7 +154,7 @@ function TableAnalyses() {
             <DatePicker
               selected={startDate}
               onChange={onChange}
-              minDate={new Date()}
+              minDate={sub(new Date(), { days: 30 })}
               maxDate={new Date()}
               startDate={startDate}
               endDate={endDate}
