@@ -8,7 +8,6 @@ import { useState } from 'react';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import TableComponent from '../../components/table/table';
-import { addDays } from 'date-fns';
 import ReactLoading from 'react-loading';
 import { useNavigate } from 'react-router-dom';
 
