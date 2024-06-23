@@ -3,6 +3,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { format } from 'date-fns';
 import { useState } from 'react';
 import './table.css';
 
@@ -21,6 +22,11 @@ function TableComponent({ data, dataPending }) {
           {data.length !== 0 && (
             <div className="scrollBar">
               {data.map((item, index) => {
+                const completedHeaders = Object.keys(item.summary);
+                completedHeaders.shift();
+                completedHeaders.shift();
+                completedHeaders.push('Atrasados', 'Atrasados - %');
+
                 return (
                   <div id="tables" key={index}>
                     <Table
@@ -33,7 +39,7 @@ function TableComponent({ data, dataPending }) {
                       <thead>
                         <tr>
                           <th key={index}>Referência</th>
-                          {Object.keys(item.summary).map((key, index) => (
+                          {completedHeaders.map((key, index) => (
                             <th key={index}>{key}</th>
                           ))}
                         </tr>
@@ -41,7 +47,7 @@ function TableComponent({ data, dataPending }) {
                       <tbody>
                         <tr>
                           <td key={index}>{item.tableName}</td>
-                          {Object.keys(item.summary).map((key, index) => (
+                          {completedHeaders.map((key, index) => (
                             <th key={index}>
                               <div className="container-number">
                                 {key.includes('%') ||
@@ -78,6 +84,11 @@ function TableComponent({ data, dataPending }) {
           {dataPending.length !== 0 && (
             <div className="scrollBar">
               {dataPending.map((item, index) => {
+                const pendingHeaders = Object.keys(item.summary);
+                pendingHeaders.shift();
+                pendingHeaders.shift();
+                pendingHeaders.push('Atrasados', 'Atrasados - %');
+
                 return (
                   <div id="tables" key={index}>
                     <Table
@@ -90,7 +101,7 @@ function TableComponent({ data, dataPending }) {
                       <thead>
                         <tr key={index}>
                           <th key={index}>Referência</th>
-                          {Object.keys(item.summary).map((key, index) => (
+                          {pendingHeaders.map((key, index) => (
                             <th key={index}>{key}</th>
                           ))}
                         </tr>
@@ -98,7 +109,7 @@ function TableComponent({ data, dataPending }) {
                       <tbody>
                         <tr>
                           <td>{item.tableName}</td>
-                          {Object.keys(item.summary).map((key, index) => (
+                          {pendingHeaders.map((key, index) => (
                             <th key={index}>
                               <div className="container-number">
                                 {key.includes('%') ||
@@ -165,6 +176,7 @@ function InformationModal({ children, number, classification }) {
                   <th>Nº de Serviço</th>
                   <th>Status</th>
                   <th>Resultado</th>
+                  <th>Data de Início</th>
                   <th>Classificação</th>
                   <th>TSS</th>
                 </tr>
@@ -182,6 +194,9 @@ function InformationModal({ children, number, classification }) {
                           <td key={i}>{item.order_service}</td>
                           <td key={i}>{item.status}</td>
                           <td key={i}>{item.result}</td>
+                          <td key={i}>
+                            {format(item.start_date, 'dd/MM/yyyy HH:mm')}
+                          </td>
                           <td key={i}>{item.classification}</td>
                           <td key={i}>{item.tss}</td>
                         </tr>
