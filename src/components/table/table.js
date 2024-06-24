@@ -172,7 +172,6 @@ function InformationModal({ children, number, classification }) {
                 <tr>
                   <th>Cidade</th>
                   <th>Endereço</th>
-                  <th>Tipo</th>
                   <th>Nº de Serviço</th>
                   <th>Status</th>
                   <th>Resultado</th>
@@ -190,7 +189,6 @@ function InformationModal({ children, number, classification }) {
                         <tr key={i}>
                           <td key={i}>{item.city}</td>
                           <td key={i}>{item.address}</td>
-                          <td key={i}>{item.type}</td>
                           <td key={i}>{item.order_service}</td>
                           <td key={i}>{item.status}</td>
                           <td key={i}>{item.result}</td>
