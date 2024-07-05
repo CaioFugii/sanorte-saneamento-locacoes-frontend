@@ -152,7 +152,7 @@ function TableAnalyses() {
       {isData === false && (
         <div className="container-table">
           <div className="container-date">
-            <p>Selecionar data de consulta :</p>
+            <p>Consultar tarefas executadas por data:</p>
             <DatePicker
               selected={startDate}
               onChange={onChange}

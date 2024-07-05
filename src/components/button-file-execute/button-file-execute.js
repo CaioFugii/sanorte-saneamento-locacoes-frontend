@@ -16,6 +16,9 @@ function ButtonFileExecute() {
   async function handleFileUpload(event) {
     const file = event.target.files[0];
     setIsData(true);
+    if (file.size === 0) {
+      navigate('/error-file-execute');
+    }
     if (
       file &&
       (file.type ===

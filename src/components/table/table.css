@@ -31,3 +31,23 @@
   background-color: #656668;
   border-radius: 8px;
 }
+
+.late {
+  color: red;
+}
+
+.dark {
+  color: black;
+}
+
+.late-link {
+  color: red;
+  background-color: transparent;
+  border: none;
+}
+
+.dark-link {
+  color: black;
+  background-color: transparent;
+  border: none;
+}

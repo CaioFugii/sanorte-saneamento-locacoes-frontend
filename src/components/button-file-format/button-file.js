@@ -21,7 +21,8 @@ function ButtonFile() {
       file &&
       (file.type ===
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-        file.type === 'application/vnd.ms-excel')
+        file.type === 'application/vnd.ms-excel') &&
+      file.size > 0
     ) {
       const reader = new FileReader();
       reader.onload = async (e) => {

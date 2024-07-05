@@ -53,12 +53,25 @@ function TableComponent({ data, dataPending }) {
                                 {key.includes('%') ||
                                 key === 'Total' ||
                                 item.summary[key] === 0 ? (
-                                  item.summary[key]
+                                  <span
+                                    className={
+                                      index !== 0 &&
+                                      index !== 1 &&
+                                      index !== 2 &&
+                                      item.summary[key] > '0' &&
+                                      item.summary[key] > '0%'
+                                        ? 'late'
+                                        : 'dark'
+                                    }
+                                  >
+                                    {item.summary[key]}
+                                  </span>
                                 ) : (
                                   <InformationModal
                                     children={item.values}
                                     number={item.summary[key]}
                                     classification={key}
+                                    late={index}
                                   />
                                 )}
                               </div>
@@ -115,12 +128,25 @@ function TableComponent({ data, dataPending }) {
                                 {key.includes('%') ||
                                 key === 'Total' ||
                                 item.summary[key] === 0 ? (
-                                  item.summary[key]
+                                  <span
+                                    className={
+                                      index !== 0 &&
+                                      index !== 1 &&
+                                      index !== 2 &&
+                                      item.summary[key] > '0' &&
+                                      item.summary[key] > '0%'
+                                        ? 'late'
+                                        : 'dark'
+                                    }
+                                  >
+                                    {item.summary[key]}
+                                  </span>
                                 ) : (
                                   <InformationModal
                                     children={item.values}
                                     number={item.summary[key]}
                                     classification={key}
+                                    late={index}
                                   />
                                 )}
                               </div>
@@ -145,12 +171,19 @@ function TableComponent({ data, dataPending }) {
   );
 }
 
-function InformationModal({ children, number, classification }) {
+function InformationModal({ children, number, classification, late }) {
   const [lgShow, setLgShow] = useState(false);
   const dataModal = children;
+
   return (
     <>
-      <Button variant="link" onClick={() => setLgShow(true)}>
+      <Button
+        className={
+          late !== 0 && late !== 1 && late !== 2 ? 'late-link' : 'dark-link'
+        }
+        variant="link"
+        onClick={() => setLgShow(true)}
+      >
         {number}
       </Button>
       <Modal

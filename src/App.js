@@ -13,6 +13,8 @@ import SuccessExecuteComponent from './components/successExecute/successExecute'
 import SuccessPendingComponent from './components/successPending/successPending';
 import ErrorExecuteComponent from './components/errorExecute /errorExecute';
 import ErrorPendingComponent from './components/successPending copy/errorPending';
+import ErrorFileExecuteComponent from './components/errorFileExecute/errorFileExecute';
+import ErrorFilePendingComponent from './components/errorFilePending/errorFilePending';
 
 function App() {
   const PrivateRoute = ({ children }) => {
@@ -94,6 +96,22 @@ function App() {
           element={
             <PrivateRoute>
               <ErrorExecuteComponent />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="error-file-execute"
+          element={
+            <PrivateRoute>
+              <ErrorFileExecuteComponent />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="error-file-pending"
+          element={
+            <PrivateRoute>
+              <ErrorFilePendingComponent />
             </PrivateRoute>
           }
         />
