@@ -2,6 +2,11 @@ input[type='file'] {
   display: none;
 }
 
+.disabledLabel {
+  opacity: 0.33;
+  cursor: not-allowed !important;
+}
+
 #label-input {
   width: 110px;
   height: 110px;
@@ -20,4 +25,21 @@ input[type='file'] {
 #container-success {
   display: flex;
   flex-direction: column;
+}
+
+.container-city {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+h4 {
+  margin: 0 5px 0 0;
+}
+
+.custom-select {
+  border-radius: 3px;
+}
+
+.custom-select:focus {
+  border-color: #007bff;
 }

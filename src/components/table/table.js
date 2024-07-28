@@ -7,7 +7,12 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 import './table.css';
 
-function TableComponent({ data, dataPending }) {
+function TableComponent({
+  data,
+  dataPending,
+  lastDatePending,
+  lastDateCompleted,
+}) {
   return (
     <Tabs
       defaultActiveKey="home"
@@ -19,6 +24,16 @@ function TableComponent({ data, dataPending }) {
     >
       <Tab eventKey="home" title="Tarefas executadas">
         <div className="container">
+          {lastDateCompleted != null ? (
+            <div className="alert alert-warning" role="alert">
+              Ultima data de inclusão:
+              <span className="alert-link">
+                {format(lastDateCompleted, 'dd/MM/yyyy HH:mm')}
+              </span>
+            </div>
+          ) : (
+            <div></div>
+          )}
           {data.length !== 0 && (
             <div className="scrollBar">
               {data.map((item, index) => {
@@ -87,7 +102,7 @@ function TableComponent({ data, dataPending }) {
           )}
           {data.length === 0 && (
             <div className="alert alert-dark" role="alert">
-              Não há tarefas executadas nessa data
+              Não há tarefas executadas
             </div>
           )}
         </div>
@@ -160,9 +175,19 @@ function TableComponent({ data, dataPending }) {
               })}
             </div>
           )}
+          {lastDatePending != null ? (
+            <div>
+              Ultima data de inclusão:
+              <span className="alert-link">
+                {format(lastDatePending, 'dd/MM/yyyy HH:mm')}
+              </span>
+            </div>
+          ) : (
+            <div></div>
+          )}
           {dataPending.length === 0 && (
             <div className="alert alert-dark" role="alert">
-              Não há tarefas pendentes nessa data
+              Não há tarefas pendentes
             </div>
           )}
         </div>

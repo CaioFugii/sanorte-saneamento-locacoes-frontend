@@ -9,21 +9,8 @@ function CityAnalyses() {
   const location = localStorage.getItem('location');
   const [city, setCity] = React.useState([]);
   React.useEffect(() => {
-    if (location === '*') {
-      setCity([
-        'Santos - Cubatão',
-        'São Sebastião - Ilha bela',
-        'São Vicente',
-        'Guarujá e Bertioga',
-      ]);
-    } else if (location === 'Santos - Cubatão') {
-      setCity(['Santos - Cubatão']);
-    } else if (location === 'São Sebastião - Ilha bela') {
-      setCity(['São Sebastião - Ilha bela']);
-    } else if (location === 'São Vicente') {
-      setCity(['São Vicente']);
-    } else if (location === 'Guarujá e Bertioga') {
-      setCity(['Guarujá e Bertioga']);
+    if (location) {
+      setCity(location.split(','));
     }
   }, [location]);
 
