@@ -224,43 +224,84 @@ function InformationModal({ children, number, classification, late }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
-            <Table striped bordered hover variant="primary" responsive="sm">
-              <thead>
-                <tr>
-                  <th>Cidade</th>
-                  <th>Endereço</th>
-                  <th>Nº de Serviço</th>
-                  <th>Status</th>
-                  <th>Resultado</th>
-                  <th>Data de Início</th>
-                  <th>Classificação</th>
-                  <th>TSS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataModal &&
-                  dataModal
-                    .filter((data) => data.classification === classification)
-                    .map((item, i) => {
-                      return (
-                        <tr key={i}>
-                          <td key={i}>{item.city}</td>
-                          <td key={i}>{item.address}</td>
-                          <td key={i}>{item.order_service}</td>
-                          <td key={i}>{item.status}</td>
-                          <td key={i}>{item.result}</td>
-                          <td key={i}>
-                            {format(item.start_date, 'dd/MM/yyyy HH:mm')}
-                          </td>
-                          <td key={i}>{item.classification}</td>
-                          <td key={i}>{item.tss}</td>
-                        </tr>
-                      );
-                    })}
-              </tbody>
-            </Table>
-          </div>
+          <Tabs
+            defaultActiveKey="Relatório Geral"
+            id="uncontrolled-tab-example"
+            className="mb-3"
+            fill
+            variant="pills"
+            transition
+          >
+            <Tab eventKey="home" title="Relatório Geral">
+              <Table striped bordered hover variant="primary" responsive="sm">
+                <thead>
+                  <tr>
+                    <th>Cidade</th>
+                    <th>Endereço</th>
+                    <th>Nº de Serviço</th>
+                    <th>Status</th>
+                    <th>Resultado</th>
+                    <th>Data de Início</th>
+                    <th>Classificação</th>
+                    <th>TSS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataModal &&
+                    dataModal
+                      .filter((data) => data.classification === classification)
+                      .map((item, i) => {
+                        return (
+                          <tr key={i}>
+                            <td key={i}>{item.city}</td>
+                            <td key={i}>{item.address}</td>
+                            <td key={i}>{item.order_service}</td>
+                            <td key={i}>{item.status}</td>
+                            <td key={i}>{item.result}</td>
+                            <td key={i}>
+                              {format(item.start_date, 'dd/MM/yyyy HH:mm')}
+                            </td>
+                            <td key={i}>{item.classification}</td>
+                            <td key={i}>{item.tss}</td>
+                          </tr>
+                        );
+                      })}
+                </tbody>
+              </Table>
+            </Tab>
+            <Tab eventKey="profile" title="Relatório de Controle">
+              <Table striped bordered hover size="sm">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td colSpan={2}>Larry the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Tab>
+          </Tabs>
+          <div></div>
         </Modal.Body>
       </Modal>
     </>
