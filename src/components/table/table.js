@@ -222,6 +222,16 @@ function TableComponent({
       </Tab>
       <Tab eventKey="late" title="Pendentes">
         <div className="container">
+          {lastDatePending != null ? (
+            <div>
+              Ultima data de inclusão:
+              <span className="alert-link">
+                {format(lastDatePending, 'dd/MM/yyyy HH:mm')}
+              </span>
+            </div>
+          ) : (
+            <div></div>
+          )}
           {dataPending.length !== 0 && (
             <div className="scrollBar">
               {dataPending.map((item, index) => {
