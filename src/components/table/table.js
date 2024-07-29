@@ -223,7 +223,7 @@ function TableComponent({
       <Tab eventKey="late" title="Pendentes">
         <div className="container">
           {lastDatePending != null ? (
-            <div>
+            <div className="alert alert-warning" role="alert">
               Ultima data de inclusão:
               <span className="alert-link">
                 {format(lastDatePending, 'dd/MM/yyyy HH:mm')}
@@ -297,16 +297,6 @@ function TableComponent({
                 );
               })}
             </div>
-          )}
-          {lastDatePending != null ? (
-            <div>
-              Ultima data de inclusão:
-              <span className="alert-link">
-                {format(lastDatePending, 'dd/MM/yyyy HH:mm')}
-              </span>
-            </div>
-          ) : (
-            <div></div>
           )}
           {dataPending.length === 0 && (
             <div className="alert alert-dark" role="alert">
