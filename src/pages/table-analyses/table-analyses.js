@@ -2,10 +2,8 @@
 import React from 'react';
 import './table-analyses.css';
 import ContainerPage from '../container-page/container-page';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
-import { sub } from 'date-fns';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import TableComponent from '../../components/table/table';
@@ -15,9 +13,9 @@ import { useNavigate } from 'react-router-dom';
 function TableAnalyses() {
   const [data, setData] = React.useState([]);
   const [dataPending, setDataPending] = React.useState([]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
   const [isData, setIsData] = useState(true);
+  const [lastDatePending, setLastDatePending] = useState(null);
+  const [lastDateCompleted, setLastDateCompleted] = useState(null);
   const navigate = useNavigate();
 
   let date = new Date();
@@ -29,25 +27,64 @@ function TableAnalyses() {
   let formatDate = year + '-' + String(month).padStart(2, '0') + '-' + day;
   const tokenJwt = localStorage.getItem('token');
   const city = localStorage.getItem('citySelected');
-  const getTable = async (from, to) => {
+
+  const getLastDate = async () => {
+    try {
+      const url = new URL(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/last-inserts`
+      );
+
+      const availableLocations = {
+        Santos: 'STS',
+        Cubatão: 'CBT',
+        'São Sebastião': 'SSB',
+        'Ilha bela': 'ILB',
+        'São Vicente': 'SVT',
+        Guarujá: 'GUJ',
+        Bertioga: 'BTG',
+      };
+
+      const location = availableLocations[city];
+      url.searchParams.append('location', location);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: tokenJwt,
+        },
+      });
+      if (response.ok) {
+        const lastDates = await response.json();
+        setLastDateCompleted(lastDates[0]);
+        setLastDatePending(lastDates[1]);
+      }
+    } catch (error) {
+      navigate('/city');
+      console.log(error);
+    }
+  };
+  const getTable = async () => {
     try {
       const url = new URL(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/completed-services`
       );
       const availableLocations = {
-        'Santos - Cubatão': 'SC',
-        'São Sebastião - Ilha bela': 'SI',
-        'São Vicente': 'SV',
-        'Guarujá e Bertioga': 'GB',
+        Santos: 'STS',
+        Cubatão: 'CBT',
+        'São Sebastião': 'SSB',
+        'Ilha bela': 'ILB',
+        'São Vicente': 'SVT',
+        Guarujá: 'GUJ',
+        Bertioga: 'BTG',
       };
+
       const location = availableLocations[city];
 
       if (!location) {
         throw new Error('Location is required');
       }
 
-      url.searchParams.append('from', from);
-      url.searchParams.append('to', to);
       url.searchParams.append('location', location);
       setIsData(true);
       const response = await fetch(url, {
@@ -66,21 +103,22 @@ function TableAnalyses() {
       console.log(error);
     }
   };
-  const getTablePending = async (initialDateFilter, endDateFilter) => {
+  const getTablePending = async () => {
     try {
       const url = new URL(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/pending-services`
       );
       const availableLocations = {
-        'Santos - Cubatão': 'SC',
-        'São Sebastião - Ilha bela': 'SI',
-        'São Vicente': 'SV',
-        'Guarujá e Bertioga': 'GB',
+        Santos: 'STS',
+        Cubatão: 'CBT',
+        'São Sebastião': 'SSB',
+        'Ilha bela': 'ILB',
+        'São Vicente': 'SVT',
+        Guarujá: 'GUJ',
+        Bertioga: 'BTG',
       };
       const location = availableLocations[city];
 
-      url.searchParams.append('from', initialDateFilter);
-      url.searchParams.append('to', endDateFilter);
       url.searchParams.append('location', location);
 
       const response = await fetch(url, {
@@ -101,41 +139,8 @@ function TableAnalyses() {
   React.useEffect(() => {
     getTable(formatDate, formatDate);
     getTablePending(formatDate, formatDate);
+    getLastDate();
   }, [city]);
-
-  const onChange = (dates) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-
-    let startDay = startDate.getDate();
-
-    let startMonth = startDate.getMonth() + 1;
-
-    let startYear = startDate.getFullYear();
-    let formatDateStart =
-      startYear +
-      '-' +
-      String(startMonth).padStart(2, '0') +
-      '-' +
-      String(startDay).padStart(2, '0');
-
-    if (end) {
-      let endDay = end.getDate();
-
-      let endMonth = end.getMonth() + 1;
-
-      let endYear = end.getFullYear();
-      let formatDateEnd =
-        endYear +
-        '-' +
-        String(endMonth).padStart(2, '0') +
-        '-' +
-        String(endDay).padStart(2, '0');
-      getTable(formatDateStart, formatDateEnd);
-      getTablePending(formatDateStart, formatDateEnd);
-    }
-  };
 
   return (
     <ContainerPage>
@@ -151,23 +156,12 @@ function TableAnalyses() {
       )}
       {isData === false && (
         <div className="container-table">
-          <div className="container-date">
-            <p>Consultar tarefas executadas por data:</p>
-            <DatePicker
-              selected={startDate}
-              onChange={onChange}
-              minDate={sub(new Date(), { days: 30 })}
-              maxDate={new Date()}
-              startDate={startDate}
-              endDate={endDate}
-              selectsRange
-              dateFormat="dd/MM/yyyy"
-            />
-          </div>
           {data && (
             <TableComponent
               data={data}
               dataPending={dataPending}
+              lastDateCompleted={lastDateCompleted?.date}
+              lastDatePending={lastDatePending?.date}
             ></TableComponent>
           )}
         </div>

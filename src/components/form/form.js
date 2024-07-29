@@ -16,7 +16,6 @@ function Form() {
   }
 
   async function handleClick() {
-    console.log(user, password);
     setIsData(true);
     try {
       const response = await fetch(
@@ -37,7 +36,7 @@ function Form() {
         const decodedToken = decodeToken(token.token);
         localStorage.setItem('token', token.token);
         localStorage.setItem('exp', decodedToken.exp);
-        localStorage.setItem('location', decodedToken.location);
+        localStorage.setItem('location', decodedToken.locations);
         localStorage.setItem('current_user', decodedToken.role);
         setIsData(false);
         navigate('/file');

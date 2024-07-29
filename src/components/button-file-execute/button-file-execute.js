@@ -9,13 +9,27 @@ import Modal from 'react-bootstrap/Modal';
 function ButtonFileExecute() {
   const [modalShow, setModalShow] = React.useState(false);
   const [isData, setIsData] = React.useState(false);
+  const [isSelectedCity, setIsSelectedCity] = React.useState('#');
+
   const navigate = useNavigate();
 
   const tokenJwt = localStorage.getItem('token');
+  const city = localStorage.getItem('location').split(',');
 
   async function handleFileUpload(event) {
     const file = event.target.files[0];
     setIsData(true);
+    const availableLocations = {
+      Santos: 'STS',
+      Cubatão: 'CBT',
+      'São Sebastião': 'SSB',
+      'Ilha bela': 'ILB',
+      'São Vicente': 'SVT',
+      Guarujá: 'GUJ',
+      Bertioga: 'BTG',
+    };
+
+    const location = availableLocations[isSelectedCity];
     if (file.size === 0) {
       navigate('/error-file-execute');
     }
@@ -28,7 +42,7 @@ function ButtonFileExecute() {
       const formData = new FormData();
       formData.append('file', file);
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/completed-services`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/completed-services?location=${location}`,
         {
           method: 'POST',
           headers: {
@@ -52,6 +66,10 @@ function ButtonFileExecute() {
     }
   }
 
+  const changeCity = (e) => {
+    setIsSelectedCity(e.target.value);
+  };
+
   return (
     <>
       <ContainerPage>
@@ -68,12 +86,37 @@ function ButtonFileExecute() {
         {isData === false && (
           <div className="text-content">
             <h1 className="title">Carregamento de tarefas executadas:</h1>
-            <label htmlFor="input-button" id="label-input">
+            <div className="container-city">
+              <h4>Referente a cidade de:</h4>
+              <select
+                className="custom-select"
+                id="inputGroupSelect01"
+                onChange={(e) => changeCity(e)}
+              >
+                <option value="#" defaultValue>
+                  Selecionar
+                </option>
+                {city.map((city, index) => {
+                  return (
+                    <option key={index} value={city}>
+                      {city}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            <label
+              htmlFor="input-button"
+              id="label-input"
+              className={isSelectedCity === '#' ? 'disabledLabel' : ''}
+            >
               <img src="./icon-file.png" alt="icon-file" />
               Arquivo
             </label>
           </div>
         )}
+
         <input
           type="file"
           multiple={false}
@@ -81,6 +124,7 @@ function ButtonFileExecute() {
           onChange={handleFileUpload}
           name="input-button"
           accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          disabled={isSelectedCity === '#'}
         />
       </ContainerPage>
       <Modal
