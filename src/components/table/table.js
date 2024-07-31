@@ -179,7 +179,6 @@ function TableComponent({
                             <th key={index}>
                               <div className="container-number">
                                 {key.includes('%') ||
-                                key === 'Total' ||
                                 item.summary[key] === 0 ? (
                                   <span
                                     className={
@@ -264,7 +263,6 @@ function TableComponent({
                             <th key={index}>
                               <div className="container-number">
                                 {key.includes('%') ||
-                                key === 'Total' ||
                                 item.summary[key] === 0 ? (
                                   <span
                                     className={
@@ -312,9 +310,16 @@ function TableComponent({
 function InformationModal({ children, number, classification, late }) {
   const [lgShow, setLgShow] = useState(false);
   const dataModal = children;
-  const dataFiltered = dataModal.filter(
-    (data) => data.classification === classification
-  );
+
+  let dataFiltered = [];
+
+  if (classification === 'Total') {
+    dataFiltered = dataModal;
+  } else {
+    dataFiltered = dataModal.filter(
+      (data) => data.classification === classification
+    );
+  }
   let reportControl = {};
 
   dataFiltered.forEach((data) => {
