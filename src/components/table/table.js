@@ -199,6 +199,7 @@ function TableComponent({
                                     number={item.summary[key]}
                                     classification={key}
                                     late={index}
+                                    type={'Executados'}
                                   />
                                 )}
                               </div>
@@ -283,6 +284,7 @@ function TableComponent({
                                     number={item.summary[key]}
                                     classification={key}
                                     late={index}
+                                    type={'Pendentes'}
                                   />
                                 )}
                               </div>
@@ -307,19 +309,23 @@ function TableComponent({
   );
 }
 
-function InformationModal({ children, number, classification, late }) {
+function InformationModal({ children, number, classification, late, type }) {
   const [lgShow, setLgShow] = useState(false);
   const dataModal = children;
 
   let dataFiltered = [];
+  let title = '';
 
   if (classification === 'Total') {
     dataFiltered = dataModal;
+    title = `TOTAL - ${dataModal[0]?.type}`;
   } else {
     dataFiltered = dataModal.filter(
       (data) => data.classification === classification
     );
+    title = `${dataFiltered[0]?.type} - ${classification}`;
   }
+
   let reportControl = {};
 
   dataFiltered.forEach((data) => {
@@ -327,6 +333,7 @@ function InformationModal({ children, number, classification, late }) {
 
     reportControl[category] = (reportControl[category] ?? 0) + 1;
   });
+
   const total = dataFiltered.length;
 
   const resultReportControl = Object.keys(reportControl).map((item) => ({
@@ -355,7 +362,7 @@ function InformationModal({ children, number, classification, late }) {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-lg">
-            Informações
+            {`${type}: ${title}`}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
