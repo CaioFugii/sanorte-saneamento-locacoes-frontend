@@ -135,7 +135,7 @@ function TableComponent({
       variant="pills"
       transition
     >
-      <Tab eventKey="home" title="Tarefas executadas">
+      <Tab eventKey="home" title="EXECUTADOS">
         <div className="container">
           {lastDateCompleted != null ? (
             <div className="alert alert-warning" role="alert">
@@ -220,7 +220,7 @@ function TableComponent({
           )}
         </div>
       </Tab>
-      <Tab eventKey="late" title="Pendentes">
+      <Tab eventKey="late" title="PENDENTES">
         <div className="container">
           {lastDatePending != null ? (
             <div className="alert alert-warning" role="alert">
