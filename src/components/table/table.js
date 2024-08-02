@@ -3,7 +3,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { format } from 'date-fns';
+import { format, isBefore } from 'date-fns';
 import { useState } from 'react';
 import './table.css';
 
@@ -326,20 +326,36 @@ function InformationModal({ children, number, classification, late, type }) {
     title = `${dataFiltered[0]?.type} - ${classification}`;
   }
 
-  let reportControl = {};
+  let reportControlCount = {};
+  let reportControlLastDate = {};
+
+  const getLastDate = (defaultDate, dateToCompare) => {
+    if (defaultDate === dateToCompare) {
+      return defaultDate;
+    }
+
+    if (isBefore(defaultDate, dateToCompare)) {
+      return defaultDate;
+    } else {
+      return dateToCompare;
+    }
+  };
 
   dataFiltered.forEach((data) => {
     const category = SUB_CATEGORY[data.tss] ?? 'N/A';
 
-    reportControl[category] = (reportControl[category] ?? 0) + 1;
+    reportControlCount[category] = (reportControlCount[category] ?? 0) + 1;
+    reportControlLastDate[category] = getLastDate(
+      reportControlLastDate[category] ??
+        format(data.start_date, 'dd/MM/yyyy HH:mm'),
+      format(data.start_date, 'dd/MM/yyyy HH:mm')
+    );
   });
 
-  const total = dataFiltered.length;
-
-  const resultReportControl = Object.keys(reportControl).map((item) => ({
+  const resultReportControl = Object.keys(reportControlCount).map((item) => ({
     category: item,
-    quantity: reportControl[item],
-    percentage: ((reportControl[item] * 100) / total).toFixed(2) + '%',
+    quantity: reportControlCount[item],
+    lastDate: reportControlLastDate[item],
   }));
 
   return (
@@ -415,7 +431,7 @@ function InformationModal({ children, number, classification, late, type }) {
                   <tr>
                     <th>Categoria</th>
                     <th>Quantidade</th>
-                    <th>Porcentagem</th>
+                    <th>Serviço mais antigo</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -424,7 +440,7 @@ function InformationModal({ children, number, classification, late, type }) {
                       <tr key={item.category}>
                         <td key={item.category}>{item.category}</td>
                         <td key={item.category}>{item.quantity}</td>
-                        <td key={item.category}>{item.percentage}</td>
+                        <td key={item.category}>{item.lastDate}</td>
                       </tr>
                     );
                   })}
