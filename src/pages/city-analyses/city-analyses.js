@@ -16,9 +16,11 @@ function CityAnalyses() {
 
   return (
     <ContainerPage>
-      {city.map((item, index) => {
-        return <Cards key={index} children={item} />;
-      })}
+      <div className="container-button">
+        {city.map((item, index) => {
+          return <Cards key={index} children={item} />;
+        })}
+      </div>
     </ContainerPage>
   );
 }

@@ -59,3 +59,9 @@ label,
   color: red;
   margin-top: 2px;
 }
+
+.container-button {
+  max-width: 315px;
+  flex-wrap: wrap;
+  display: flex;
+}
